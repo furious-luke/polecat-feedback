@@ -1,24 +1,4 @@
-# from functools import wraps
-
 from .feedback import Feedback
-
-# from .utils import decorator_with_args
-
-
-# @decorator_with_args
-# def feedback(func, title=None):
-#     @wraps(func)
-#     def inner(*args, feedback=None, parent_feedback=None, renderer=None, **kwargs):
-#         assert not (feedback and parent_feedback)
-#         if feedback is None:
-#             feedback = Feedback(title, renderer=renderer)
-#         else:
-#             if title:
-#                 feedback.title = title
-#         if parent_feedback:
-#             parent_feedback.next_step(feedback)
-#         return func(*args, feedback=feedback, **kwargs)
-#     return inner
 
 
 class feedback:

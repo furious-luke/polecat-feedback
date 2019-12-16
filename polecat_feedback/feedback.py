@@ -20,6 +20,7 @@ class Feedback:
         self.previous_status = None
         self.status = status
         self.renderer = renderer
+        self.summaries = []
         self.render()
 
     def __call__(self, title):
@@ -101,6 +102,8 @@ class Feedback:
                 step.index = self.step_index
                 step.renderer = self.renderer
                 step.status = self.READY
+        if self.status == self.INITIALISING:
+            self.set_status(self.READY)
         self.render()
 
     def add_notice(self, notice, step=None):
@@ -110,6 +113,9 @@ class Feedback:
     def add_warning(self, notice, step=None):
         self.notices.append(Notice(notice, level=WARNING))
         self.render()
+
+    def add_summary(self, summary):
+        self.summaries.append(summary)
 
     def render(self):
         if self.parent:

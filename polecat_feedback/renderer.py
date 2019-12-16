@@ -5,6 +5,7 @@ from blessed import Terminal
 from . import codes
 from .gutter_renderer import GutterRenderer
 from .header_renderer import HeaderRenderer
+from .list_renderer import ListRenderer
 from .notice_renderer import NoticeRenderer
 from .spinner import Spinner
 from .stats_renderer import StatsRenderer
@@ -23,6 +24,7 @@ class Renderer:
         self.gutter_renderer = GutterRenderer(self)
         self.notice_renderer = NoticeRenderer(self)
         self.stats_renderer = StatsRenderer(self)
+        self.list_renderer = ListRenderer(self)
 
     def __enter__(self):
         self._ctx = self.t.hidden_cursor()
@@ -46,12 +48,14 @@ class Renderer:
             self.render_nested(f)
             if f.status != f.INITIALISING:
                 self.stats_renderer.render(f)
+            for summary in f.summaries:
+                summary.render(self)
 
     def render_nested(self, f, y=None):
         self.header_renderer.render(f, y)
-        for notice in f.notices:
-            self.notice_renderer.render(f, notice)
         if f.status != f.INITIALISING:
+            for notice in f.notices:
+                self.notice_renderer.render(f, notice)
             if not f.parent:
                 for step in f.steps:
                     self.render(step, y=self.wh)
@@ -117,3 +121,6 @@ class Renderer:
         self.wh += 1
         if self.wh + self.y > self.h:
             self.y -= 1
+
+    def list(self, items, empty=None):
+        self.list_renderer.render(items, empty)

@@ -32,7 +32,11 @@ class GutterRenderer:
         t = self.t
         color = t.cyan if notice.level == INFO else t.yellow
         code = codes.NOTICE_CODE if notice.level == INFO else codes.WARNING_CODE
-        return ' ' + t.bright_black(codes.VERTICAL_CODE) + '    ' + color(code) + ' '
+        bar = t.bright_black(codes.VERTICAL_CODE)
+        if f.parent:
+            if f.index == len(f.parent.steps) - 1:
+                bar = ' '
+        return ' ' + bar + '    ' + color(code) + ' '
 
     def get_gutter_color(self, f):
         t = self.t
